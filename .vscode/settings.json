@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "LICENSE": "plaintext",
+        "typeinfo": "c",
+        "lj_obj.h": "c",
+        "lj_bc.h": "c",
+        "lj_bcdef.h": "c",
+        "lj_def.h": "c",
+        "lj_arch.h": "c",
+        "lua.h": "c",
+        "numbers": "c",
+        "functional": "cpp"
+    },
+    "editor.indentSize": "tabSize"
+    // 8 space tabs
+}
