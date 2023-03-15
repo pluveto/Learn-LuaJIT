@@ -108,7 +108,7 @@ void LJ_FASTCALL lj_func_freeuv(global_State *g, GCupval *uv)
 
 /* -- Functions (closures) ------------------------------------------------ */
 
-GCfunc *lj_func_newC(lua_State *L, MSize nelems, GCtab *env)
+GCfunc *lj_func_newC(lua_State *L, MSize nelems, GCtab *env) 
 {
   GCfunc *fn = (GCfunc *)lj_mem_newgco(L, sizeCfunc(nelems));
   fn->c.gct = ~LJ_TFUNC;

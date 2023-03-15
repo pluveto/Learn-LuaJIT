@@ -5,30 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
+            "name": "Debug",
             "program": "${workspaceFolder}/src/luajit",
             "args": [
-                "tests/hello.lua"
+                "/Users/zijingzhang/Repo/Learn-LuaJIT/notes/jitdemo.lua"
+
             ],
-            "stopAtEntry": true,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

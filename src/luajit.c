@@ -578,7 +578,7 @@ int main(int argc, char **argv)
   }
   smain.argc = argc;
   smain.argv = argv;
-  status = lua_cpcall(L, pmain, NULL);
+  status = lua_cpcall(L, pmain, NULL); // ~~ 
   report(L, status);
   lua_close(L);
   return (status || smain.status > 0) ? EXIT_FAILURE : EXIT_SUCCESS;

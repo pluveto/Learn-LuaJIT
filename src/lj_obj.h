@@ -33,7 +33,7 @@ typedef struct MRef {
 } MRef;
 
 #if LJ_GC64
-#define mref(r, t)	((t *)(void *)(r).ptr64)
+#define mref(r, t)	((t *)(void *)(r).ptr64) /* ~~ mref is a wrap of pointer, so it can be compatible with 32+64bit */
 #define mrefu(r)	((r).ptr64)
 
 #define setmref(r, p)	((r).ptr64 = (uint64_t)(void *)(p))
@@ -511,7 +511,7 @@ typedef struct GCtab {
 } GCtab;
 
 #define sizetabcolo(n)	((n)*sizeof(TValue) + sizeof(GCtab))
-#define tabref(r)	((GCtab *)gcref((r)))
+#define tabref(r)	((GCtab *)gcref((r))) // ~~ convert gcref as gctab*
 #define noderef(r)	(mref((r), Node))
 #define nextnode(n)	(mref((n)->next, Node))
 #if LJ_GC64
@@ -826,7 +826,7 @@ typedef union GCobj {
 #endif
 
 /* Macros to get tagged values. */
-#if LJ_GC64
+#if LJ_GC64 // ~~ get gcr sa GCobject pointer from TValue
 #define gcval(o)	((GCobj *)(gcrefu((o)->gcr) & LJ_GCVMASK))
 #else
 #define gcval(o)	(gcref((o)->gcr))

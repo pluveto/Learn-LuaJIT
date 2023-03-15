@@ -1149,7 +1149,7 @@ LUA_API int lua_pcall(lua_State *L, int nargs, int nresults, int errfunc)
 
 static TValue *cpcall(lua_State *L, lua_CFunction func, void *ud)
 {
-  GCfunc *fn = lj_func_newC(L, 0, getcurrenv(L));
+  GCfunc *fn = lj_func_newC(L, 0, getcurrenv(L)); 
   TValue *top = L->top;
   fn->c.f = func;
   setfuncV(L, top++, fn);
@@ -1170,7 +1170,7 @@ LUA_API int lua_cpcall(lua_State *L, lua_CFunction func, void *ud)
   int status;
   lj_checkapi(L->status == LUA_OK || L->status == LUA_ERRERR,
 	      "thread called in wrong state %d", L->status);
-  status = lj_vm_cpcall(L, func, ud, cpcall);
+  status = lj_vm_cpcall(L, func, ud, cpcall); // ~~
   if (status) hook_restore(g, oldh);
   return status;
 }

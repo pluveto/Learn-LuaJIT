@@ -9,8 +9,10 @@
         "lj_arch.h": "c",
         "lua.h": "c",
         "numbers": "c",
-        "functional": "cpp"
+        "functional": "cpp",
+        "stdio.h": "c"
     },
-    "editor.indentSize": "tabSize"
+    "editor.indentSize": "tabSize",
+    "editor.tabSize": 8
     // 8 space tabs
 }
