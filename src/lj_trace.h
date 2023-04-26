@@ -7,6 +7,7 @@
 #define _LJ_TRACE_H
 
 #include "lj_obj.h"
+#include "stdio.h"
 
 #if LJ_HASJIT
 #include "lj_jit.h"
@@ -42,8 +43,8 @@ LJ_FUNC uintptr_t LJ_FASTCALL lj_trace_unwind(jit_State *J, uintptr_t addr, Exit
 #endif
 
 /* Signal asynchronous abort of trace or end of trace. */
-#define lj_trace_abort(g)	(G2J(g)->state &= ~LJ_TRACE_ACTIVE)
-#define lj_trace_end(J)		(J->state = LJ_TRACE_END)
+#define lj_trace_abort(g)	do{G2J(g)->state &= ~LJ_TRACE_ACTIVE; printf("lj_trace_abort");}while(0)
+#define lj_trace_end(J)		do{J->state = LJ_TRACE_END; printf("lj_trace_end");}while(0)
 
 #else
 

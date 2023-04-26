@@ -425,6 +425,7 @@ static void trace_start(jit_State *J)
       J->pt->flags |= PROTO_ILOOP;
     }
     J->state = LJ_TRACE_IDLE;  /* Silently ignored. */
+    printf("jstate = LJ_TRACE_IDLE\n");
     return;
   }
 
@@ -435,6 +436,7 @@ static void trace_start(jit_State *J)
 	       "recorder called from GC hook");
     lj_trace_flushall(J->L);
     J->state = LJ_TRACE_IDLE;  /* Silently ignored. */
+    printf("jstate = LJ_TRACE_IDLE\n");
     return;
   }
   setgcrefp(J->trace[traceno], &J->cur);
@@ -560,6 +562,7 @@ static int trace_downrec(jit_State *J)
   J->parent = 0;
   J->exitno = 0;
   J->state = LJ_TRACE_RECORD;
+  printf("jstate = LJ_TRACE_RECORD\n");
   trace_start(J);
   return 1;
 }
@@ -582,6 +585,8 @@ static int trace_abort(jit_State *J)
   if (e == LJ_TRERR_MCODELM) {
     L->top--;  /* Remove error object */
     J->state = LJ_TRACE_ASM;
+  printf("jstate = LJ_TRACE_ASM\n");
+
     return 1;  /* Retry ASM with new MCode area. */
   }
   /* Penalize or blacklist starting bytecode instruction. */
@@ -659,6 +664,8 @@ static TValue *trace_state(lua_State *L, lua_CFunction dummy, void *ud)
     switch (J->state) {
     case LJ_TRACE_START:
       J->state = LJ_TRACE_RECORD;  /* trace_start() may change state. */
+      printf("jstate = LJ_TRACE_RECORD\n");
+
       trace_start(J);
       lj_dispatch_update(J2G(J));
       if (J->state != LJ_TRACE_RECORD_1ST)
@@ -667,6 +674,8 @@ static TValue *trace_state(lua_State *L, lua_CFunction dummy, void *ud)
 
     case LJ_TRACE_RECORD_1ST:
       J->state = LJ_TRACE_RECORD;
+      printf("jstate = LJ_TRACE_RECORD\n");
+
       /* fallthrough */
     case LJ_TRACE_RECORD:
       trace_pendpatch(J, 0);
@@ -702,6 +711,8 @@ static TValue *trace_state(lua_State *L, lua_CFunction dummy, void *ud)
 	  J->cur.linktype = LJ_TRLINK_NONE;
 	  J->loopref = J->cur.nins;
 	  J->state = LJ_TRACE_RECORD;  /* Try to continue recording. */
+          printf("jstate = LJ_TRACE_RECORD\n");
+
 	  break;
 	}
 	J->loopref = J->chain[IR_LOOP];  /* Needed by assembler. */
@@ -710,6 +721,8 @@ static TValue *trace_state(lua_State *L, lua_CFunction dummy, void *ud)
       lj_opt_sink(J);
       if (!J->loopref) J->cur.snap[J->cur.nsnap-1].count = SNAPCOUNT_DONE;
       J->state = LJ_TRACE_ASM;
+      printf("jstate = LJ_TRACE_ASM\n");
+
       break;
 
     case LJ_TRACE_ASM:
@@ -718,6 +731,8 @@ static TValue *trace_state(lua_State *L, lua_CFunction dummy, void *ud)
       trace_stop(J);
       setvmstate(J2G(J), INTERP);
       J->state = LJ_TRACE_IDLE;
+      printf("jstate = LJ_TRACE_IDLE\n");
+
       lj_dispatch_update(J2G(J));
       return NULL;
 
@@ -730,6 +745,8 @@ static TValue *trace_state(lua_State *L, lua_CFunction dummy, void *ud)
 	goto retry;
       setvmstate(J2G(J), INTERP);
       J->state = LJ_TRACE_IDLE;
+      printf("jstate = LJ_TRACE_IDLE\n");
+
       lj_dispatch_update(J2G(J));
       return NULL;
     }
@@ -747,7 +764,8 @@ void lj_trace_ins(jit_State *J, const BCIns *pc)
   J->fn = curr_func(J->L);
   J->pt = isluafunc(J->fn) ? funcproto(J->fn) : NULL;
   while (lj_vm_cpcall(J->L, NULL, (void *)J, trace_state) != 0)
-    J->state = LJ_TRACE_ERR;
+    {J->state = LJ_TRACE_ERR;
+      printf("jstate = LJ_TRACE_ERR\n");}
 }
 
 /* A hotcount triggered. Start recording a root trace. */
@@ -763,6 +781,7 @@ void LJ_FASTCALL lj_trace_hot(jit_State *J, const BCIns *pc)
     J->parent = 0;  /* Root trace. */
     J->exitno = 0;
     J->state = LJ_TRACE_START;
+      printf("jstate = LJ_TRACE_START\n");
     lj_trace_ins(J, pc-1);
   }
   ERRNO_RESTORE
@@ -779,6 +798,7 @@ static void trace_hotside(jit_State *J, const BCIns *pc)
     lj_assertJ(J->state == LJ_TRACE_IDLE, "hot side exit while recording");
     /* J->parent is non-zero for a side trace. */
     J->state = LJ_TRACE_START;
+      printf("jstate = LJ_TRACE_START\n");
     lj_trace_ins(J, pc);
   }
 }
@@ -792,6 +812,7 @@ void LJ_FASTCALL lj_trace_stitch(jit_State *J, const BCIns *pc)
     J->parent = 0;  /* Have to treat it like a root trace. */
     /* J->exitno is set to the invoking trace. */
     J->state = LJ_TRACE_START;
+      printf("jstate = LJ_TRACE_START\n");
     lj_trace_ins(J, pc);
   }
 }

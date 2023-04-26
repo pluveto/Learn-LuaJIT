@@ -510,6 +510,7 @@ static struct Smain {
 
 static int pmain(lua_State *L)
 {
+  printf("pmain\n");
   struct Smain *s = &smain;
   char **argv = s->argv;
   int argn;

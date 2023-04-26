@@ -728,6 +728,7 @@ static uint32_t jit_cpudetect(void)
 /* Initialize JIT compiler. */
 static void jit_init(lua_State *L)
 {
+  printf("jit_init\n");
   jit_State *J = L2J(L);
   J->flags = jit_cpudetect() | JIT_F_ON | JIT_F_OPT_DEFAULT;
   memcpy(J->param, jit_param_default, sizeof(J->param));

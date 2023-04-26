@@ -42,6 +42,7 @@ LUALIB_API void luaL_openlibs(lua_State *L)
   for (lib = lj_lib_load; lib->func; lib++) {
     lua_pushcfunction(L, lib->func);
     lua_pushstring(L, lib->name);
+    printf("luaL_openlibs: calling %s\n", lib->name);
     lua_call(L, 1, 0);
   }
   luaL_findtable(L, LUA_REGISTRYINDEX, "_PRELOAD",

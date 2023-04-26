@@ -287,6 +287,7 @@ LUA_API void lua_close(lua_State *L)
 #if LJ_HASJIT
   G2J(g)->flags &= ~JIT_F_ON;
   G2J(g)->state = LJ_TRACE_IDLE;
+  printf("jstate = LJ_TRACE_IDLE\n");
   lj_dispatch_update(g);
 #endif
   for (i = 0;;) {

@@ -109,3 +109,28 @@ PCd 要右移一位是因为 LuaJIT 的字节码指令是两个字节的，而�
 #define HOTCOUNT_PCMASK		((HOTCOUNT_SIZE-1)*sizeof(HotCount))
 
 这么设计的思路是为了使得哈希值的范围和内存的占用都比较合理。HOTCOUNT_SIZE 定义了热度计数的数量，也就是哈希表的大小。它必须是一个 2 的幂，这样可以使得哈希值的分布更加均匀，减少冲突的概率。HOTCOUNT_PCMASK 定义了掩码的值，它是由 HOTCOUNT_SIZE 乘以 HotCount 的大小得到的。HotCount 是一个 16 位的无符号整数，所以它的大小是 2 个字节。这样 HOTCOUNT_PCMASK 的值就是 (64-1)*2 = 126，也就是 0111 1110。这样可以保证哈希值的最高位是 0，避免与字节码指令的地址混淆。
+
+LuaJIT 是如何进行尾递归优化的？
+
+LuaJIT 是一个高性能的 Lua 解释器和编译器，它可以对尾递归进行优化，从而避免栈溢出和提高执行效率。尾递归是指一个函数在最后一步调用另一个函数，而不做任何其他操作。LuaJIT 的尾递归优化有两种方式，一种是基于 switch-case 的解释器循环，另一种是基于 tail call 的解释器循环¹²。
+
+基于 switch-case 的解释器循环是 LuaJIT 的默认方式，它使用一个大的 switch 语句来处理不同的字节码指令，其中有一个 case 是专门用来处理尾递归的。当遇到一个尾递归的字节码指令时，它会先检查栈的空间是否足够，如果不够，就会扩展栈。然后它会将当前函数的栈帧弹出，并将被调用函数的参数复制到栈顶。最后它会跳转到被调用函数的入口点，继续执行¹。
+
+基于 tail call 的解释器循环是 LuaJIT 的另一种方式，它使用一种称为 continuation-passing style 的技术，将每个字节码指令封装成一个单独的函数，并通过尾调用来传递控制权。当遇到一个尾递归的字节码指令时，它会直接调用被调用函数的入口点函数，并将当前函数的栈帧和被调用函数的参数作为参数传递。这样就可以避免栈的扩展和复制，提高执行效率²。
+
+LuaJIT 可以通过编译选项或运行时选项来选择使用哪种方式进行尾递归优化¹³。😊
+
+源: 与必应的对话， 2023/3/15(1) lua - LuaJIT 2 optimization guide - Stack Overflow. https://stackoverflow.com/questions/7167566/luajit-2-optimization-guide 访问时间 2023/3/15.
+(2) Building the fastest Lua interpreter.. automatically!. https://sillycross.github.io/2022/11/22/2022-11-22/ 访问时间 2023/3/15.
+(3) How to disable tail call optimizations for C calls? #972. https://github.com/LuaJIT/LuaJIT/issues/972 访问时间 2023/3/15.
+
+LuaJIT 的源代码可以在 GitHub 上找到，有多个分支和镜像¹²³。两种方式对应的代码分别在以下文件中：
+
+- 基于 switch-case 的解释器循环的代码在 src/lj_vm.c 中，其中有一个大的 switch 语句，以及一个处理尾递归的 case。
+- 基于 tail call 的解释器循环的代码在 src/lj_vm.S 中，其中有一个大的宏定义，以及一个处理尾递归的宏。
+
+你可以查看这些文件来了解更多细节。😊
+
+源: 与必应的对话， 2023/3/15(1) GitHub - LuaJIT/LuaJIT: Mirror of the LuaJIT git repository. https://github.com/LuaJIT/LuaJIT 访问时间 2023/3/15.
+(2) GitHub - openresty/luajit2: OpenResty's Branch of LuaJIT 2. https://github.com/openresty/luajit2 访问时间 2023/3/15.
+(3) LuaJIT · GitHub. https://github.com/luajit 访问时间 2023/3/15.

@@ -409,7 +409,7 @@ void LJ_FASTCALL lj_dispatch_ins(lua_State *L, const BCIns *pc)
   const BCIns *oldpc = cframe_pc(cf);
   global_State *g = G(L);
   BCReg slots;
-  setcframe_pc(cf, pc);
+  setcframe_pc(cf, pc); // 这行代码将当前的字节码指针 pc 存储到 L->cframe 中，使得下一次调用指令分派函数时可以从正确的位置继续执行字节码。
   slots = cur_topslot(pt, pc, cframe_multres_n(cf));
   L->top = L->base + slots;  /* Fix top. */
 #if LJ_HASJIT

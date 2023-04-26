@@ -180,6 +180,7 @@ static void snapshot_stack(jit_State *J, SnapShot *snap, MSize nsnapmap)
 /* Add or merge a snapshot. */
 void lj_snap_add(jit_State *J)
 {
+  printf("snap add\n");
   MSize nsnap = J->cur.nsnap;
   MSize nsnapmap = J->cur.nsnapmap;
   /* Merge if no ins. inbetween or if requested and no guard inbetween. */
@@ -340,6 +341,8 @@ static void snap_useuv(GCproto *pt, uint8_t *udf)
 /* Purge dead slots before the next snapshot. */
 void lj_snap_purge(jit_State *J)
 {
+  printf("snap purge\n");
+
   uint8_t udf[SNAP_USEDEF_SLOTS];
   BCReg s, maxslot = J->maxslot;
   if (bc_op(*J->pc) == BC_FUNCV && maxslot > J->pt->numparams)
@@ -356,6 +359,8 @@ void lj_snap_purge(jit_State *J)
 /* Shrink last snapshot. */
 void lj_snap_shrink(jit_State *J)
 {
+  printf("snap shrink\n");
+
   SnapShot *snap = &J->cur.snap[J->cur.nsnap-1];
   SnapEntry *map = &J->cur.snapmap[snap->mapofs];
   MSize n, m, nlim, nent = snap->nent;
@@ -407,6 +412,8 @@ static RegSP snap_renameref(GCtrace *T, SnapNo lim, IRRef ref, RegSP rs)
 /* Copy RegSP from parent snapshot to the parent links of the IR. */
 IRIns *lj_snap_regspmap(jit_State *J, GCtrace *T, SnapNo snapno, IRIns *ir)
 {
+  printf("snap regspmap\n");
+
   SnapShot *snap = &T->snap[snapno];
   SnapEntry *map = &T->snapmap[snap->mapofs];
   BloomFilter rfilt = snap_renamefilter(T, snapno);
@@ -506,6 +513,8 @@ static LJ_AINLINE int snap_sunk_store(GCtrace *T, IRIns *ira, IRIns *irs)
 /* Replay snapshot state to setup side trace. */
 void lj_snap_replay(jit_State *J, GCtrace *T)
 {
+  printf("snap replay\n");
+
   SnapShot *snap = &T->snap[J->exitno];
   SnapEntry *map = &T->snapmap[snap->mapofs];
   MSize n, nent = snap->nent;

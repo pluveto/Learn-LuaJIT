@@ -1,0 +1,207 @@
+pmain
+luaL_openlibs: calling 
+luaL_openlibs: calling package
+luaL_openlibs: calling table
+luaL_openlibs: calling io
+luaL_openlibs: calling os
+luaL_openlibs: calling string
+luaL_openlibs: calling math
+luaL_openlibs: calling debug
+luaL_openlibs: calling bit
+luaL_openlibs: calling jit
+jit_init
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+---- TRACE 1 start hello.lua:1
+0005  GGET     4   0      ; "print"
+0006  MOV      6   3
+0007  CALL     4   1   2
+0000  . FUNCC               ; print
+---- TRACE 1 IR
+0001    [35mint[m SLOAD  #2    I
+0002    [1mfun[m SLOAD  #0    R
+0003    [31mtab[m FLOAD  0002  func.env
+0004    [35mint[m FLOAD  0003  tab.hmask
+0005 >  [35mint[m EQ     0004  [35m+63 [m
+0006    p64 FLOAD  0003  tab.node
+0007 >  p64 HREFK  0006  [32m"print"[m @63
+0008 >  [1mfun[m HLOAD  0007
+0009 >  [1mfun[m EQ     0008  [1mprint[m
+---- TRACE 1 mcode 232
+104b2ff04  mov   x26, #17280
+104b2ff08  movk  x26, #1198, lsl #16
+104b2ff0c  movk  x26, #1, lsl #32
+104b2ff10  mov   x4, #17344
+104b2ff14  movk  x4, #1198, lsl #16
+104b2ff18  movk  x4, #32769, lsl #32
+104b2ff1c  movk  x4, #65533, lsl #48
+104b2ff20  mov   x3, #17280
+104b2ff24  movk  x3, #1198, lsl #16
+104b2ff28  movk  x3, #32769, lsl #32
+104b2ff2c  movk  x3, #65531, lsl #48
+104b2ff30  mov   x2, #48752
+104b2ff34  movk  x2, #1200, lsl #16
+104b2ff38  movk  x2, #1, lsl #32
+104b2ff3c  movk  x2, #65531, lsl #48
+104b2ff40  mov   x1, #65529, lsl #48
+104b2ff44  mov   x0, #2
+104b2ff48  ldr   x30, 0x04b0bf20
+104b2ff4c  fmov  d15, x30
+104b2ff50  ldr   x30, 0x04b0bf10
+104b2ff54  fmov  d14, x30
+104b2ff58  ldr   x30, 0x04b0bef0
+104b2ff5c  fmov  d13, x30
+104b2ff60  ldr   w28, [x19]
+104b2ff64  ldur  x27, [x19, #-16]
+104b2ff68  and   x27, x27, #0x7fffffffffff
+104b2ff6c  ldr   x27, [x27, #16]
+104b2ff70  ldr   w25, [x27, #52]
+104b2ff74  cmp   w25, #63
+104b2ff78  bne   0x04b2fff8	->0
+104b2ff7c  ldr   x24, [x27, #40]
+104b2ff80  ldr   x27, [x24, #1520]
+104b2ff84  cmp   x27, x4
+104b2ff88  bne   0x04b2fff8	->0
+104b2ff8c  ldr   x27, [x24, #1512]
+104b2ff90  asr   x25, x27, #47
+104b2ff94  cmn   x25, #9
+104b2ff98  bne   0x04b2fff8	->0
+104b2ff9c  and   x27, x27, #0x7fffffffffff
+104b2ffa0  cmp   x27, x26
+104b2ffa4  bne   0x04b2fff8	->0
+104b2ffa8  ldr   x30, 0x04ae0550
+104b2ffac  ldr   x30, [x30, #48]
+104b2ffb0  sub   x30, x30, x19
+104b2ffb4  cmp   x30, #88
+104b2ffb8  bls   0x04b2fffc	->1
+104b2ffbc  add   x30, x1, w28, uxtw
+104b2ffc0  str   x30, [x19, #72]
+104b2ffc4  str   d13, [x19, #64]
+104b2ffc8  str   x3, [x19, #56]
+104b2ffcc  stp   d15, d14, [x19, #40]
+104b2ffd0  str   x2, [x19, #32]
+104b2ffd4  add   x30, x1, w28, uxtw
+104b2ffd8  str   x30, [x19, #24]
+104b2ffdc  add   x19, x19, #72
+104b2ffe0  add   x21, x22, #360
+104b2ffe4  add   sp, sp, #16
+104b2ffe8  b     0x049a075c
+---- TRACE 1 stop -> stitch
+
+57
+58
+---- TRACE 2 start 1/stitch hello.lua:2
+0008  JFORL    0   1
+---- TRACE 2 IR
+0001    [35mint[m SLOAD  #2    I
+0002    [35mint[m ADD    0001  [35m+1  [m
+0003 >  [35mint[m LE     0002  [35m+100[m
+---- TRACE 2 mcode 40
+104b2fec0  mov   x0, #65529, lsl #48
+104b2fec4  ldr   w28, [x19]
+104b2fec8  add   w28, w28, #1
+104b2fecc  cmp   w28, #100
+104b2fed0  bgt   0x04b2fefc	->1
+104b2fed4  add   x30, x0, w28, uxtw
+104b2fed8  str   x30, [x19, #24]
+104b2fedc  add   x30, x0, w28, uxtw
+104b2fee0  str   x30, [x19]
+104b2fee4  b     0x04b2ff04
+---- TRACE 2 stop -> 1
+
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
